@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE & AI tools
+.idea/
+.vscode/
+.cursor/
+.zed/
+.continue/
+.amazonq/
+.gemini/
+.roo/
+.aider.conf.yml
+.windsurfrules
+.clinerules
+.cursorrules
+.memory-core.env
+.memory-core.json
+
+# NestJS
+.nest/
+
+# Test coverage
+coverage/
