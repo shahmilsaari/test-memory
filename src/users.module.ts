@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { USER_REPOSITORY } from './domain/repositories/user.repository';
+import { USER_REPOSITORY } from './application/repositories/user.repository';
 import { InMemoryUserRepository } from './infrastructure/database/repositories/in-memory-user.repository';
 import { CreateUserUseCase } from './application/use-cases/users/create-user.use-case';
 import { GetUserUseCase } from './application/use-cases/users/get-user.use-case';

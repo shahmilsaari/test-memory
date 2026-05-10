@@ -1,8 +1,8 @@
 import { Inject } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { User } from '../../../domain/entities/user.entity';
-import { USER_REPOSITORY } from '../../../domain/repositories/user.repository';
-import type { UserRepository } from '../../../domain/repositories/user.repository';
+import { USER_REPOSITORY } from '../../repositories/user.repository';
+import type { UserRepository } from '../../repositories/user.repository';
 import { CreateUserDto } from '../../dtos/users/create-user.dto';
 import { UserResponseDto } from '../../dtos/users/user-response.dto';
 

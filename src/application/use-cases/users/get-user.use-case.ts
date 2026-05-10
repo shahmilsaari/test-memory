@@ -1,6 +1,6 @@
 import { Inject } from '@nestjs/common';
-import { USER_REPOSITORY } from '../../../domain/repositories/user.repository';
-import type { UserRepository } from '../../../domain/repositories/user.repository';
+import { USER_REPOSITORY } from '../../repositories/user.repository';
+import type { UserRepository } from '../../repositories/user.repository';
 import { UserResponseDto } from '../../dtos/users/user-response.dto';
 
 export class GetUserUseCase {

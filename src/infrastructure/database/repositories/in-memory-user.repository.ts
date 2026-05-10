@@ -1,5 +1,5 @@
 import { User } from '../../../domain/entities/user.entity';
-import { UserRepository } from '../../../domain/repositories/user.repository';
+import type { UserRepository } from '../../../application/repositories/user.repository';
 
 export class InMemoryUserRepository implements UserRepository {
   private readonly store = new Map<string, User>();
