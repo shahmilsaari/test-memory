@@ -1,10 +1,27 @@
+import { ValidationPipe, VersioningType } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { DomainExceptionFilter } from './interfaces/filters/domain-exception.filter';
+import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalFilters(new DomainExceptionFilter());
-  await app.listen(process.env.PORT ?? 3000);
+  const configService = app.get(ConfigService);
+  const port = configService.getOrThrow<number>('app.port');
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      forbidNonWhitelisted: true,
+      transform: true,
+      whitelist: true,
+    }),
+  );
+  app.useGlobalFilters(new HttpExceptionFilter());
+  app.enableVersioning({
+    defaultVersion: '1',
+    type: VersioningType.URI,
+  });
+
+  await app.listen(port);
 }
-bootstrap();
+void bootstrap();
