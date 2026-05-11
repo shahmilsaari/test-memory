@@ -40,3 +40,10 @@ Thumbs.db
 
 # Test coverage
 coverage/
+
+# memory-core generated files
+AGENTS.md
+AI_RULES.md
+ARCHITECTURE.md
+PROJECT_MEMORY.md
+.memory-core-stats.json
