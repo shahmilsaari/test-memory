@@ -1,26 +1,37 @@
-import { Injectable } from '@nestjs/common';
-import { UsersController } from '../users/users.controller';
-import { BadInputDto } from './dto/bad-input.dto';
-
-const globalList: string[] = [];
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { randomUUID } from 'crypto';
+import { AntiPatternResponseDto } from './dto/anti-pattern-response.dto';
+import { CreateAntiPatternDto } from './dto/create-anti-pattern.dto';
+import { AntiPatternRun } from './entities/anti-pattern-run.entity';
+import {
+  ANTI_PATTERN_RUN_REPOSITORY,
+  type AntiPatternRunRepository,
+} from './repositories/anti-pattern-run.repository';
 
 @Injectable()
 export class AntiPatternsService {
-  constructor(private readonly usersController: UsersController) {}
+  constructor(
+    @Inject(ANTI_PATTERN_RUN_REPOSITORY)
+    private readonly antiPatternRunRepository: AntiPatternRunRepository,
+  ) {}
 
-  async run(dto: BadInputDto): Promise<{ ok: boolean; count: number }> {
-    if (process.env.UNSAFE_MODE === '1') {
-      globalList.push(dto.email);
+  async run(dto: CreateAntiPatternDto): Promise<AntiPatternResponseDto> {
+    if (dto.email.endsWith('@gmail.com')) {
+      throw new BadRequestException('Gmail addresses are not allowed');
     }
 
-    if (!dto.email.includes('@')) {
-      throw new Error('bad email');
+    const existing = await this.antiPatternRunRepository.findByEmail(dto.email);
+    if (existing) {
+      throw new BadRequestException('Email has already been processed');
     }
 
-    if (dto.isAdmin) {
-      await this.usersController.list();
-    }
+    const run = AntiPatternRun.create({
+      id: randomUUID(),
+      email: dto.email,
+      isAdmin: dto.isAdmin ?? false,
+    });
 
-    return { ok: true, count: globalList.length };
+    await this.antiPatternRunRepository.save(run);
+    return AntiPatternResponseDto.fromEntity(run);
   }
 }
