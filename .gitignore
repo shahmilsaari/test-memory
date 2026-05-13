@@ -49,3 +49,15 @@ AI_RULES.md
 ARCHITECTURE.md
 PROJECT_MEMORY.md
 .memory-core-stats.json
+
+# memory-core generated files
+CLAUDE.md
+.github/copilot-instructions.md
+.cursor/rules/memory-core.mdc
+.roo/rules/memory-core.md
+.continue/config.json
+DEVIN.md
+.amazonq/dev/guidelines.md
+.gemini/styleguide.md
+.zed/settings.json
+.idea/ai-instructions.md
