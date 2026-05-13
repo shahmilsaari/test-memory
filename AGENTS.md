@@ -97,19 +97,6 @@
 - [rule · nestjs] CoreModule for app-wide singletons: Create a CoreModule (imported once in AppModule) for global singletons: database connection, config, logger, event emitter. Never import infrastructure providers in feature modules directly.
   Why: Importing infrastructure into every feature module creates hidden coupling between features and infrastructure. CoreModule is the single place that wires infrastructure — feature modules consume it through DI without knowing where it came from.
   Tags: modules, core-module, nestjs
-- [rule] Never swallow errors: Never catch an error and do nothing. Either handle it, re-throw it, or log it with full context. Silent catch blocks hide real failures.
-  Tags: errors, reliability
-- [rule] Hash passwords with bcrypt/argon2: Always hash passwords with bcrypt or argon2 before storing. Never store plain text, MD5, or SHA1 passwords.
-  Tags: security, auth, passwords
-- [rule] No commented-out code: Delete code that is no longer needed. Never comment it out and leave it. Git history is the record of what existed before — it can always be recovered from there.
-  Why: Commented-out code is noise that accumulates over time. Readers must decide whether it is important, temporary, or forgotten. It never gets uncommented — it just stays there forever confusing people. Delete it. Git has it.
-  Tags: code-quality, cleanup
-- [rule · nestjs] Feature modules are self-contained: Each feature lives in its own module folder: module, controller, service, DTOs, entities, and repository. Nothing leaks out except what is exported from the module class.
-  Why: A feature module that bleeds into other folders is a module in name only. Self-containment means you can move, extract, or delete a feature by touching one folder — no ripple effect across the codebase.
-  Tags: modules, nestjs
-- [rule · nestjs] class-validator on every DTO property: Every DTO property has at least one class-validator decorator: @IsString(), @IsEmail(), @IsUUID(), etc. ValidationPipe is registered globally with whitelist: true and forbidNonWhitelisted: true.
-  Why: whitelist: true strips undeclared properties — clients cannot sneak extra fields into your payload. forbidNonWhitelisted: true rejects requests with unknown properties rather than silently ignoring them — it makes API contracts explicit and rejects bad input at the boundary.
-  Tags: validation, dto, nestjs
 
 ---
 Caveman (full): terse fragments only.
