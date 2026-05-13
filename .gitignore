@@ -42,3 +42,10 @@ Thumbs.db
 coverage/
 
 .agents/skills/caveman-compress/scripts/__init__.py
+
+# memory-core generated files
+AGENTS.md
+AI_RULES.md
+ARCHITECTURE.md
+PROJECT_MEMORY.md
+.memory-core-stats.json
