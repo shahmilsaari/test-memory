@@ -1,8 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, VersioningType } from '@nestjs/common';
+import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from './../src/app.module';
+import { configureApp } from './../src/bootstrap';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication<App>;
@@ -13,18 +14,20 @@ describe('AppController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    app.enableVersioning({
-      defaultVersion: '1',
-      type: VersioningType.URI,
-    });
+    configureApp(app);
     await app.init();
   });
 
-  it('/ (GET)', () => {
+  it('/health (GET)', () => {
     return request(app.getHttpServer())
-      .get('/v1')
+      .get('/api/v1/health')
       .expect(200)
-      .expect('Hello World!');
+      .expect((response) => {
+        const body = response.body as { service: string; status: string };
+        expect(body.status).toBe('ok');
+        expect(body.service).toBe('test-memory');
+        expect(response.headers['x-correlation-id']).toBeDefined();
+      });
   });
 
   afterEach(async () => {

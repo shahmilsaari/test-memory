@@ -1,22 +1,25 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { HealthController } from './modules/health/health.controller';
+import { HealthService } from './modules/health/health.service';
 
-describe('AppController', () => {
-  let appController: AppController;
+describe('HealthController', () => {
+  let healthController: HealthController;
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
-      controllers: [AppController],
-      providers: [AppService],
+      controllers: [HealthController],
+      providers: [HealthService],
     }).compile();
 
-    appController = app.get<AppController>(AppController);
+    healthController = app.get<HealthController>(HealthController);
   });
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+  describe('getStatus', () => {
+    it('returns health response DTO', () => {
+      const response = healthController.getStatus();
+      expect(response.status).toBe('ok');
+      expect(response.service).toBe('test-memory');
+      expect(response.timestamp).toMatch(/^\d{4}-\d{2}-\d{2}T/);
     });
   });
 });

@@ -4,15 +4,18 @@ import {
   ExceptionFilter,
   HttpException,
   HttpStatus,
+  Injectable,
 } from '@nestjs/common';
-import type { Request, Response } from 'express';
+import type { Response } from 'express';
+import type { RequestWithCorrelationId } from '../types/request-with-correlation-id';
 
+@Injectable()
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
-    const request = ctx.getRequest<Request>();
+    const request = ctx.getRequest<RequestWithCorrelationId>();
 
     const status =
       exception instanceof HttpException
@@ -29,6 +32,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
         : (payload as { message?: unknown }).message;
 
     response.status(status).json({
+      correlationId: request.correlationId ?? null,
+      timestamp: new Date().toISOString(),
       statusCode: status,
       message: message ?? HttpStatus[status],
       path: request.url,

@@ -3,18 +3,18 @@ import * as Joi from 'joi';
 type ValidatedEnvironment = {
   NODE_ENV: 'development' | 'production' | 'test';
   PORT: number;
-  app: {
-    port: number;
-  };
+  CORS_ORIGINS: string;
 };
 
-const envValidationSchema: Joi.ObjectSchema<Omit<ValidatedEnvironment, 'app'>> =
-  Joi.object({
-    NODE_ENV: Joi.string()
-      .valid('development', 'production', 'test')
-      .default('development'),
-    PORT: Joi.number().port().default(3000),
-  });
+const envValidationSchema: Joi.ObjectSchema<ValidatedEnvironment> = Joi.object({
+  NODE_ENV: Joi.string()
+    .valid('development', 'production', 'test')
+    .default('development'),
+  PORT: Joi.number().port().default(3000),
+  CORS_ORIGINS: Joi.string()
+    .pattern(/^(?!.*\*)([^,\s]+)(\s*,\s*[^,\s]+)*$/)
+    .default('http://localhost:3000'),
+});
 
 export const validateEnv = (
   config: Record<string, unknown>,
@@ -28,12 +28,5 @@ export const validateEnv = (
     throw result.error;
   }
 
-  const env = result.value;
-
-  return {
-    ...env,
-    app: {
-      port: env.PORT,
-    },
-  };
+  return result.value;
 };
